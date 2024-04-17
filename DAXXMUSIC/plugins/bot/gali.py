@@ -132,7 +132,7 @@ GALI = [ "𝗠𝗔̂𝗔̂𝗗𝗔𝗥𝗖𝗛Ø𝗗 𝗧𝗘𝗥𝗜 𝗠𝗔́
 
 
 @app.on_message(
-    filters.command("gali", prefixes=["/", "!", "%", ",", "", ".", "@", "#"])
+    filters.command("gali", prefixes=["/", "!", "%", ",", "", ".", "@"])
     & filters.private)
 async def help(client: Client, message: Message):
     await message.reply_text(
