@@ -288,6 +288,15 @@ async def play_commnd(
                 err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
                 return await mystic.edit_text(err)
             return await mystic.delete()
+         else:
+            try:
+                await DAXX.stream_call(url)
+            except NoActiveGroupCall:
+                await mystic.edit_text(_["black_9"])
+                return await app.send_message(
+                    chat_id=config.LOGGER_ID,
+                    text=_["play_17"],
+                )
         else:
             if len(message.command) < 2:
                 buttons = botplaylist_markup(_)
