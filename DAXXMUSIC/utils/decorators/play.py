@@ -188,7 +188,6 @@ def PlayWrapper(command):
             video,
             channel,
             playmode,
-            url,
             fplay,
         )
 
