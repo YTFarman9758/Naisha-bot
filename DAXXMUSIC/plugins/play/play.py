@@ -289,37 +289,7 @@ async def play_commnd(
                 return await mystic.edit_text(err)
             return await mystic.delete()
         else:
-            try:
-                await DAXX.stream_call(url)
-            except NoActiveGroupCall:
-                await mystic.edit_text(_["black_9"])
-                return await app.send_message(
-                    chat_id=config.LOGGER_ID,
-                    text=_["play_17"],
-                )
-            except Exception as e:
-                return await mystic.edit_text(_["general_2"].format(type(e).__name__))
-            await mystic.edit_text(_["str_2"])
-            try:
-                await stream(
-                    _,
-                    mystic,
-                    message.from_user.id,
-                    url,
-                    chat_id,
-                    message.from_user.first_name,
-                    message.chat.id,
-                    video=video,
-                    streamtype="index",
-                    forceplay=fplay,
-                )
-            except Exception as e:
-                ex_type = type(e).__name__
-                err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
-                return await mystic.edit_text(err)
-            return await play_logs(message, streamtype="M3u8 or Index Link")
-    else:
-        if len(message.command) < 2:
+            if len(message.command) < 2:
             buttons = botplaylist_markup(_)
             return await mystic.edit_text(
                 _["play_18"],
