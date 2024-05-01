@@ -297,7 +297,6 @@ async def play_commnd(
                     chat_id=config.LOGGER_ID,
                     text=_["play_17"],
                 )
-        else:
             if len(message.command) < 2:
                 buttons = botplaylist_markup(_)
             return await mystic.edit_text(
