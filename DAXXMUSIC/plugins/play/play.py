@@ -317,7 +317,7 @@ async def play_commnd(
             return await play_logs(message, streamtype="M3u8 or Index Link")
     else:
         if len(message.command) < 2:
-                buttons = botplaylist_markup(_)
+            buttons = botplaylist_markup(_)
             return await mystic.edit_text(
                 _["play_18"],
                 reply_markup=InlineKeyboardMarkup(buttons),
