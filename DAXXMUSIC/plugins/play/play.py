@@ -271,7 +271,7 @@ async def play_commnd(
                         app.mention,
                     )
                 )
-                try:
+            try:
                 await stream(
                     _,
                     mystic,
