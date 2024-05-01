@@ -310,7 +310,6 @@ async def play_commnd(
                     streamtype="index",
                     forceplay=fplay,
                 )
-        else:
             if len(message.command) < 2:
                 buttons = botplaylist_markup(_)
             return await mystic.edit_text(
