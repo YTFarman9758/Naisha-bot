@@ -271,6 +271,60 @@ async def play_commnd(
                         app.mention,
                     )
                 )
+                try:
+                await stream(
+                    _,
+                    mystic,
+                    user_id,
+                    details,
+                    chat_id,
+                    user_name,
+                    message.chat.id,
+                    streamtype="soundcloud",
+                    forceplay=fplay,
+                )
+            except Exception as e:
+                ex_type = type(e).__name__
+                err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+                return await mystic.edit_text(err)
+            return await mystic.delete()
+        else:
+            if len(message.command) < 2:
+            buttons = botplaylist_markup(_)
+            return await mystic.edit_text(
+                _["play_18"],
+                reply_markup=InlineKeyboardMarkup(buttons),
+            )
+        slider = True
+        query = message.text.split(None, 1)[1]
+        if "-v" in query:
+            query = query.replace("-v", "")
+        try:
+            details, track_id = await YouTube.track(query)
+        except:
+            return await mystic.edit_text(_["play_3"])
+        streamtype = "youtube"
+    if str(playmode) == "Direct":
+        if not plist_type:
+            if details["duration_min"]:
+                duration_sec = time_to_seconds(details["duration_min"])
+                if duration_sec > config.DURATION_LIMIT:
+                    return await mystic.edit_text(
+                        _["play_6"].format(config.DURATION_LIMIT_MIN, app.mention)
+                    )
+            else:
+                buttons = livestream_markup(
+                    _,
+                    track_id,
+                    user_id,
+                    "v" if video else "a",
+                    "c" if channel else "g",
+                    "f" if fplay else "d",
+                )
+                return await mystic.edit_text(
+                    _["play_13"],
+                    reply_markup=InlineKeyboardMarkup(buttons),
+                )
         try:
             await stream(
                 _,
