@@ -297,6 +297,20 @@ async def play_commnd(
                     chat_id=config.LOGGER_ID,
                     text=_["play_17"],
                 )
+            try:
+                await stream(
+                    _,
+                    mystic,
+                    message.from_user.id,
+                    url,
+                    chat_id,
+                    message.from_user.first_name,
+                    message.chat.id,
+                    video=video,
+                    streamtype="index",
+                    forceplay=fplay,
+                )
+        else:
             if len(message.command) < 2:
                 buttons = botplaylist_markup(_)
             return await mystic.edit_text(
