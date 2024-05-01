@@ -367,4 +367,54 @@ async def stream(
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
-            
+    elif streamtype == "index":
+        link = result
+        title = "ɪɴᴅᴇx ᴏʀ ᴍ3ᴜ8 ʟɪɴᴋ"
+        duration_min = "00:00"
+        if await is_active_chat(chat_id):
+            await put_queue_index(
+                chat_id,
+                original_chat_id,
+                "index_url",
+                title,
+                duration_min,
+                user_name,
+                link,
+                "video" if video else "audio",
+            )
+            position = len(db.get(chat_id)) - 1
+            button = aq_markup(_, chat_id)
+            await mystic.edit_text(
+                text=_["queue_4"].format(position, title[:27], duration_min, user_name),
+                reply_markup=InlineKeyboardMarkup(button),
+            )
+        else:
+            if not forceplay:
+                db[chat_id] = []
+            await DAXX.join_call(
+                chat_id,
+                original_chat_id,
+                link,
+                video=True if video else None,
+            )
+            await put_queue_index(
+                chat_id,
+                original_chat_id,
+                "index_url",
+                title,
+                duration_min,
+                user_name,
+                link,
+                "video" if video else "audio",
+                forceplay=forceplay,
+            )
+            button = stream_markup(_, chat_id)
+            run = await app.send_photo(
+                original_chat_id,
+                photo=config.STREAM_IMG_URL,
+                caption=_["stream_2"].format(user_name),
+                reply_markup=InlineKeyboardMarkup(button),
+            )
+            db[chat_id][0]["mystic"] = run
+            db[chat_id][0]["markup"] = "tg"
+            await mystic.delete()
