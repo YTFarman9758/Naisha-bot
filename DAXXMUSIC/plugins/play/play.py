@@ -290,7 +290,7 @@ async def play_commnd(
             return await mystic.delete()
         else:
             if len(message.command) < 2:
-            buttons = botplaylist_markup(_)
+                buttons = botplaylist_markup(_)
             return await mystic.edit_text(
                 _["play_18"],
                 reply_markup=InlineKeyboardMarkup(buttons),
