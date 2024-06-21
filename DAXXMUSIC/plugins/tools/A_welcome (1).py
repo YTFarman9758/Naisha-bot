@@ -1,4 +1,4 @@
-from SHUKLAMUSIC import app
+from DAXXMUSIC import app
 from pyrogram import filters
 from pyrogram.errors import RPCError
 from pyrogram.types import ChatMemberUpdated, InlineKeyboardMarkup, InlineKeyboardButton
@@ -20,16 +20,16 @@ from pyrogram.enums import ParseMode
 from pyrogram import *
 from pyrogram.types import *
 from logging import getLogger
-from SHUKLAMUSIC.utils.shukla_ban import admin_filter
+from DAXXMUSIC.utils.daxx_ban import admin_filter
 import os
 from PIL import ImageDraw, Image, ImageFont, ImageChops
 from pyrogram import *
 from pyrogram.types import *
 from logging import getLogger
-from SHUKLAMUSIC.utils.database import get_assistant
+from DAXXMUSIC.utils.database import get_assistant
 from time import time
 import asyncio
-from SHUKLAMUSIC.utils.extraction import extract_user
+from DAXXMUSIC.utils.extraction import extract_user
 
 # Define a dictionary to track the last message timestamp for each user
 user_last_message_time = {}
