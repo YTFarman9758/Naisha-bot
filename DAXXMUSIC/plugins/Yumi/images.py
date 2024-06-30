@@ -1,53 +1,53 @@
-import os
-import shutil
-from re import findall
-from bing_image_downloader import downloader
-from pyrogram import Client, filters
-from pyrogram.types import InputMediaPhoto, Message
+import requests
+
+from requests import get
+
 from DAXXMUSIC import app
 
-@app.on_message(filters.command(["img", "image"], prefixes=["/", "!"]))
-async def google_img_search(client: Client, message: Message):
-    chat_id = message.chat.id
+from pyrogram import filters
 
-    try:
-        query = message.text.split(None, 1)[1]
-    except IndexError:
-        return await message.reply("Provide an image query to search!")
+from pyrogram.types import InputMedia Photo
 
-    lim = findall(r"lim=\d+", query)
-    try:
-        lim = int(lim[0].replace("lim=", ""))
-        query = query.replace(f"lim={lim}", "")
-    except IndexError:
-        lim = 5  # Default limit to 5 images
+@app.on_message(filters.command(["image"], prefixes=["/", "1", "%", ".", ""."
 
-    download_dir = "downloads"
+async def pinterest(, message):
 
-    try:
-        downloader.download(query, limit=lim, output_dir=download_dir, adult_filter_off=True, force_replace=False, timeout=60)
-        images_dir = os.path.join(download_dir, query)
-        if not os.listdir(images_dir):
-            raise Exception("No images were downloaded.")
-        lst = [os.path.join(images_dir, img) for img in os.listdir(images_dir)][:lim]  # Ensure we only take the number of images specified by lim
-    except Exception as e:
-        return await message.reply(f"Error in downloading images: {e}")
+chat_id = message.chat.id
 
-    msg = await message.reply("𝐘ᴇsɪᴋᴏᴏ Scrapping images...")
+try:
 
-    count = 0
-    for img in lst:
-        count += 1
-        await msg.edit(f"𝐘ᴇsɪᴋᴏᴏ owo scrapped images {count}")
+query message.text.split(None,1) [1]
 
-    try:
-        await app.send_media_group(
-            chat_id=chat_id,
-            media=[InputMediaPhoto(media=img) for img in lst],
-            reply_to_message_id=message.id
-        )
-        shutil.rmtree(images_dir)
-        await msg.delete()
-    except Exception as e:
-        await msg.delete()
-        return await message.reply(f"Error in sending images: {e}")
+except:
+
+return await message.reply("**GIVE IMAGE NAME FOR SEARCH **")
+
+images get(f"https://pinterest-api-one.vercel.app/?q={query}").json()
+
+media_group= []
+
+count = 0
+
+msg await message.reply(f"SCRAPING IMAGES FROM PINTERETS...")
+
+for url in images["images"] [:6]:
+
+media_group.append(InputMediaPhoto(media=url))
+
+count += 1
+
+await msg.edit(f"=> owo SCRAPED IMAGES {count}")
+
+await app.send_media_group(
+
+chat_id=chat_id,
+
+media-media_group, reply_to_message_id=message.id)
+
+return await msg.delete()
+
+except Exception as e:
+
+await msg.delete()
+
+return await message.reply(f"ERROR: {e}")
