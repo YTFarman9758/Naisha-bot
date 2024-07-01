@@ -11,7 +11,7 @@ from youtubesearchpython.__future__ import VideosSearch
 import config
 from DAXXMUSIC import app
 from DAXXMUSIC.misc import _boot_
-from DAXXMUSIC.utils import bot_up_time
+from DAXXMUSIC.utils import bot_sys_stats
 from DAXXMUSIC.plugins.sudo.sudoers import sudoers_list
 from DAXXMUSIC.utils.database import (
     add_served_chat,
