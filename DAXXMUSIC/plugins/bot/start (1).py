@@ -23,7 +23,7 @@ from DAXXMUSIC.utils.database import (
 )
 from DAXXMUSIC.utils.decorators.language import LanguageStart
 from DAXXMUSIC.utils.formatters import get_readable_time
-from DAXXMUSIC.utils.inline import first_page, private_panel, start_panel
+from DAXXMUSIC.utils.inline import help_pannel, private_panel, start_panel
 from config import BANNED_USERS
 from strings import get_string
 from DAXXMUSIC.utils.database import get_assistant
