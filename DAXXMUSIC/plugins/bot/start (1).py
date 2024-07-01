@@ -9,11 +9,11 @@ from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from youtubesearchpython.__future__ import VideosSearch
 import config
-from SHUKLAMUSIC import app
-from SHUKLAMUSIC.misc import _boot_
-from SHUKLAMUSIC.utils import bot_up_time
-from SHUKLAMUSIC.plugins.sudo.sudoers import sudoers_list
-from SHUKLAMUSIC.utils.database import (
+from DAXXMUSIC import app
+from DAXXMUSIC.misc import _boot_
+from DAXXMUSIC.utils import bot_up_time
+from DAXXMUSIC.plugins.sudo.sudoers import sudoers_list
+from DAXXMUSIC.utils.database import (
     add_served_chat,
     add_served_user,
     blacklisted_chats,
@@ -21,15 +21,15 @@ from SHUKLAMUSIC.utils.database import (
     is_banned_user,
     is_on_off,
 )
-from SHUKLAMUSIC.utils.decorators.language import LanguageStart
-from SHUKLAMUSIC.utils.formatters import get_readable_time
-from SHUKLAMUSIC.utils.inline import first_page, private_panel, start_panel
+from DAXXMUSIC.utils.decorators.language import LanguageStart
+from DAXXMUSIC.utils.formatters import get_readable_time
+from DAXXMUSIC.utils.inline import first_page, private_panel, start_panel
 from config import BANNED_USERS
 from strings import get_string
-from SHUKLAMUSIC.utils.database import get_assistant
+from DAXXMUSIC.utils.database import get_assistant
 from time import time
 import asyncio
-from SHUKLAMUSIC.utils.extraction import extract_user
+from DAXXMUSIC.utils.extraction import extract_user
 
 # Define a dictionary to track the last message timestamp for each user
 user_last_message_time = {}
