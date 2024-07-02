@@ -11,10 +11,10 @@ from youtubesearchpython.__future__ import VideosSearch
 import config
 from config import BANNED_USERS
 from strings import get_string
-from VIPMUSIC import app
-from VIPMUSIC.plugins.sudo.sudoers import sudoers_list
-from VIPMUSIC.utils import bot_up_time
-from VIPMUSIC.utils.database import (
+from DAXXMUSIC import app
+from DAXXMUSIC.plugins.sudo.sudoers import sudoers_list
+from DAXXMUSIC.utils import bot_up_time
+from DAXXMUSIC.utils.database import (
     add_served_chat,
     add_served_user,
     blacklisted_chats,
@@ -23,8 +23,8 @@ from VIPMUSIC.utils.database import (
     is_banned_user,
     is_on_off,
 )
-from VIPMUSIC.utils.decorators.language import LanguageStart
-from VIPMUSIC.utils.inline import first_page, private_panel, start_panel
+from DAXXMUSIC.utils.decorators.language import LanguageStart
+from DAXXMUSIC.utils.inline import first_page, private_panel, start_panel
 
 # Define a dictionary to track the last message timestamp for each user
 user_last_message_time = {}
