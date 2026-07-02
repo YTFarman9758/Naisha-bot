@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 import re
 from typing import Union
@@ -20,15 +21,26 @@ import random
 import logging
 
 def cookie_txt_file():
-    folder_path = f"{os.getcwd()}/cookies"
-    filename = f"{os.getcwd()}/cookies/logs.csv"
-    txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
-    if not txt_files:
-        raise FileNotFoundError("No .txt files found in the specified folder.")
-    cookie_txt_file = random.choice(txt_files)
-    with open(filename, 'a') as file:
-        file.write(f'Choosen File : {cookie_txt_file}\n')
-    return f"""cookies/{str(cookie_txt_file).split("/")[-1]}"""
+    """Deprecated: this bot no longer uses cookies. Kept as a no-op so any
+    stray reference elsewhere doesn't crash; returns None."""
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Cookie-free YouTube access.
+# We avoid --cookies / cookiefile entirely and instead ask yt-dlp to use the
+# "android" / "web" InnerTube player clients, which (unlike the default web
+# client) do not require a signed-in session to fetch playback URLs. If
+# YouTube tightens this further in the future, keep yt-dlp itself updated
+# (`pip install -U yt-dlp`) — this trick relies on yt-dlp's extractor, not on
+# this bot's code.
+# ---------------------------------------------------------------------------
+NO_COOKIE_YTDL_OPTS = {
+    "geo_bypass": True,
+    "nocheckcertificate": True,
+    "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+}
+NO_COOKIE_CLI_ARGS = ["--extractor-args", "youtube:player_client=android,web"]
 
 
 
@@ -36,7 +48,7 @@ async def check_file_size(link):
     async def get_format_info(link):
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
-            "--cookies", cookie_txt_file(),
+            *NO_COOKIE_CLI_ARGS,
             "-J",
             link,
             stdout=asyncio.subprocess.PIPE,
@@ -176,7 +188,7 @@ class YouTubeAPI:
             link = link.split("&")[0]
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
-            "--cookies",cookie_txt_file(),
+            *NO_COOKIE_CLI_ARGS,
             "-g",
             "-f",
             "best[height<=?720][width<=?1280]",
@@ -196,7 +208,7 @@ class YouTubeAPI:
         if "&" in link:
             link = link.split("&")[0]
         playlist = await shell_cmd(
-            f"yt-dlp -i --get-id --flat-playlist --cookies {cookie_txt_file()} --playlist-end {limit} --skip-download {link}"
+            f"yt-dlp -i --get-id --flat-playlist --extractor-args \"youtube:player_client=android,web\" --playlist-end {limit} --skip-download {link}"
         )
         try:
             result = playlist.split("\n")
@@ -233,7 +245,7 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        ytdl_opts = {"quiet": True, "cookiefile" : cookie_txt_file()}
+        ytdl_opts = {"quiet": True, **NO_COOKIE_YTDL_OPTS}
         ydl = yt_dlp.YoutubeDL(ytdl_opts)
         with ydl:
             formats_available = []
@@ -303,7 +315,7 @@ class YouTubeAPI:
                 "geo_bypass": True,
                 "nocheckcertificate": True,
                 "quiet": True,
-                "cookiefile" : cookie_txt_file(),
+                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
                 "no_warnings": True,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
@@ -321,7 +333,7 @@ class YouTubeAPI:
                 "geo_bypass": True,
                 "nocheckcertificate": True,
                 "quiet": True,
-                "cookiefile" : cookie_txt_file(),
+                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
                 "no_warnings": True,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
@@ -342,7 +354,7 @@ class YouTubeAPI:
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile" : cookie_txt_file(),
+                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
                 "prefer_ffmpeg": True,
                 "merge_output_format": "mp4",
             }
@@ -358,7 +370,7 @@ class YouTubeAPI:
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile" : cookie_txt_file(),
+                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
                 "prefer_ffmpeg": True,
                 "postprocessors": [
                     {
@@ -386,7 +398,7 @@ class YouTubeAPI:
             else:
                 proc = await asyncio.create_subprocess_exec(
                     "yt-dlp",
-                    "--cookies",cookie_txt_file(),
+                    *NO_COOKIE_CLI_ARGS,
                     "-g",
                     "-f",
                     "best[height<=?720][width<=?1280]",
