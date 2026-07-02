@@ -25,5 +25,8 @@ async def logger(client, message, _):
 @app.on_message(filters.command(["cookies"]) & SUDOERS)
 @language
 async def logger(client, message, _):
-    await message.reply_document("cookies/logs.csv")
-    await message.reply_text("Please check given file to cookies file choosing logs...")
+    await message.reply_text(
+        "ℹ️ This bot no longer uses cookies to fetch YouTube streams — it "
+        "relies on yt-dlp's android/web client bypass instead. There is "
+        "nothing to check here anymore."
+    )
