@@ -13,7 +13,7 @@ from pytgcalls.exceptions import (
 )
 from pytgcalls.types import Update
 from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
-from pytgcalls.types.input_stream.quality import HighQualityAudio, MediumQualityVideo
+from pytgcalls.types.input_stream.quality import MediumQualityAudio, MediumQualityVideo
 from pytgcalls.types.stream import StreamAudioEnded
 
 import config
@@ -191,14 +191,14 @@ class Call(PyTgCalls):
         stream = (
             AudioVideoPiped(
                 out,
-                audio_parameters=HighQualityAudio(),
+                audio_parameters=MediumQualityAudio(),
                 video_parameters=MediumQualityVideo(),
                 additional_ffmpeg_parameters=f"-ss {played} -to {duration}",
             )
             if playing[0]["streamtype"] == "video"
             else AudioPiped(
                 out,
-                audio_parameters=HighQualityAudio(),
+                audio_parameters=MediumQualityAudio(),
                 additional_ffmpeg_parameters=f"-ss {played} -to {duration}",
             )
         )
@@ -239,18 +239,14 @@ class Call(PyTgCalls):
         image: Union[bool, str] = None,
     ):
         assistant = await group_assistant(self, chat_id)
-        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
-        if is_light_mode(chat_id) and not video:
-            link = await generate_visualizer(link)
-            video = True
         if video:
             stream = AudioVideoPiped(
                 link,
-                audio_parameters=HighQualityAudio(),
+                audio_parameters=MediumQualityAudio(),
                 video_parameters=MediumQualityVideo(),
             )
         else:
-            stream = AudioPiped(link, audio_parameters=HighQualityAudio())
+            stream = AudioPiped(link, audio_parameters=MediumQualityAudio())
         await assistant.change_stream(
             chat_id,
             stream,
@@ -261,14 +257,14 @@ class Call(PyTgCalls):
         stream = (
             AudioVideoPiped(
                 file_path,
-                audio_parameters=HighQualityAudio(),
+                audio_parameters=MediumQualityAudio(),
                 video_parameters=MediumQualityVideo(),
                 additional_ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
             if mode == "video"
             else AudioPiped(
                 file_path,
-                audio_parameters=HighQualityAudio(),
+                audio_parameters=MediumQualityAudio(),
                 additional_ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
         )
@@ -295,25 +291,21 @@ class Call(PyTgCalls):
         assistant = await group_assistant(self, chat_id)
         language = await get_lang(chat_id)
         _ = get_string(language)
-        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
-        if is_light_mode(chat_id) and not video:
-            link = await generate_visualizer(link)
-            video = True
         if video:
             stream = AudioVideoPiped(
                 link,
-                audio_parameters=HighQualityAudio(),
+                audio_parameters=MediumQualityAudio(),
                 video_parameters=MediumQualityVideo(),
             )
         else:
             stream = (
                 AudioVideoPiped(
                     link,
-                    audio_parameters=HighQualityAudio(),
+                    audio_parameters=MediumQualityAudio(),
                     video_parameters=MediumQualityVideo(),
                 )
                 if video
-                else AudioPiped(link, audio_parameters=HighQualityAudio())
+                else AudioPiped(link, audio_parameters=MediumQualityAudio())
             )
         try:
             await assistant.join_group_call(
@@ -338,7 +330,6 @@ class Call(PyTgCalls):
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
     async def change_stream(self, client, chat_id):
-        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
         check = db.get(chat_id)
         popped = None
         loop = await get_loop(chat_id)
@@ -382,19 +373,16 @@ class Call(PyTgCalls):
                         original_chat_id,
                         text=_["call_6"],
                     )
-                if is_light_mode(chat_id) and not video:
-                    link = await generate_visualizer(link)
-                    video = True
                 if video:
                     stream = AudioVideoPiped(
                         link,
-                        audio_parameters=HighQualityAudio(),
+                        audio_parameters=MediumQualityAudio(),
                         video_parameters=MediumQualityVideo(),
                     )
                 else:
                     stream = AudioPiped(
                         link,
-                        audio_parameters=HighQualityAudio(),
+                        audio_parameters=MediumQualityAudio(),
                     )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -431,19 +419,16 @@ class Call(PyTgCalls):
                     return await mystic.edit_text(
                         _["call_6"], disable_web_page_preview=True
                     )
-                if is_light_mode(chat_id) and not video:
-                    file_path = await generate_visualizer(file_path)
-                    video = True
                 if video:
                     stream = AudioVideoPiped(
                         file_path,
-                        audio_parameters=HighQualityAudio(),
+                        audio_parameters=MediumQualityAudio(),
                         video_parameters=MediumQualityVideo(),
                     )
                 else:
                     stream = AudioPiped(
                         file_path,
-                        audio_parameters=HighQualityAudio(),
+                        audio_parameters=MediumQualityAudio(),
                     )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -472,11 +457,11 @@ class Call(PyTgCalls):
                 stream = (
                     AudioVideoPiped(
                         videoid,
-                        audio_parameters=HighQualityAudio(),
+                        audio_parameters=MediumQualityAudio(),
                         video_parameters=MediumQualityVideo(),
                     )
                     if str(streamtype) == "video"
-                    else AudioPiped(videoid, audio_parameters=HighQualityAudio())
+                    else AudioPiped(videoid, audio_parameters=MediumQualityAudio())
                 )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -495,19 +480,16 @@ class Call(PyTgCalls):
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
             else:
-                if is_light_mode(chat_id) and not video:
-                    queued = await generate_visualizer(queued)
-                    video = True
                 if video:
                     stream = AudioVideoPiped(
                         queued,
-                        audio_parameters=HighQualityAudio(),
+                        audio_parameters=MediumQualityAudio(),
                         video_parameters=MediumQualityVideo(),
                     )
                 else:
                     stream = AudioPiped(
                         queued,
-                        audio_parameters=HighQualityAudio(),
+                        audio_parameters=MediumQualityAudio(),
                     )
                 try:
                     await client.change_stream(chat_id, stream)
