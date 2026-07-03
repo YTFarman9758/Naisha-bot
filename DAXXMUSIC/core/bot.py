@@ -21,7 +21,8 @@ class DAXX(Client):
             api_hash=config.API_HASH,
             bot_token=config.BOT_TOKEN,
             in_memory=True,
-            max_concurrent_transmissions=7,
+            workers=4,  # lowered for low-resource ($5/mo Railway) hosting
+            max_concurrent_transmissions=2,  # lowered for low-resource ($5/mo Railway) hosting
         )
 
     async def start(self):
