@@ -239,6 +239,10 @@ class Call(PyTgCalls):
         image: Union[bool, str] = None,
     ):
         assistant = await group_assistant(self, chat_id)
+        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
+        if is_light_mode(chat_id) and not video:
+            link = await generate_visualizer(link)
+            video = True
         if video:
             stream = AudioVideoPiped(
                 link,
@@ -291,6 +295,10 @@ class Call(PyTgCalls):
         assistant = await group_assistant(self, chat_id)
         language = await get_lang(chat_id)
         _ = get_string(language)
+        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
+        if is_light_mode(chat_id) and not video:
+            link = await generate_visualizer(link)
+            video = True
         if video:
             stream = AudioVideoPiped(
                 link,
@@ -330,6 +338,7 @@ class Call(PyTgCalls):
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
     async def change_stream(self, client, chat_id):
+        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
         check = db.get(chat_id)
         popped = None
         loop = await get_loop(chat_id)
@@ -373,6 +382,9 @@ class Call(PyTgCalls):
                         original_chat_id,
                         text=_["call_6"],
                     )
+                if is_light_mode(chat_id) and not video:
+                    link = await generate_visualizer(link)
+                    video = True
                 if video:
                     stream = AudioVideoPiped(
                         link,
@@ -419,6 +431,9 @@ class Call(PyTgCalls):
                     return await mystic.edit_text(
                         _["call_6"], disable_web_page_preview=True
                     )
+                if is_light_mode(chat_id) and not video:
+                    file_path = await generate_visualizer(file_path)
+                    video = True
                 if video:
                     stream = AudioVideoPiped(
                         file_path,
@@ -480,6 +495,9 @@ class Call(PyTgCalls):
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
             else:
+                if is_light_mode(chat_id) and not video:
+                    queued = await generate_visualizer(queued)
+                    video = True
                 if video:
                     stream = AudioVideoPiped(
                         queued,
