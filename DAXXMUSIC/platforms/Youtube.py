@@ -38,9 +38,9 @@ def cookie_txt_file():
 NO_COOKIE_YTDL_OPTS = {
     "geo_bypass": True,
     "nocheckcertificate": True,
-    "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+    "extractor_args": {"youtube": {"player_client": ["android", "ios", "tv_embedded", "web"]}},
 }
-NO_COOKIE_CLI_ARGS = ["--extractor-args", "youtube:player_client=android,web"]
+NO_COOKIE_CLI_ARGS = ["--extractor-args", "youtube:player_client=android,ios,tv_embedded,web"]
 
 
 
@@ -208,7 +208,7 @@ class YouTubeAPI:
         if "&" in link:
             link = link.split("&")[0]
         playlist = await shell_cmd(
-            f"yt-dlp -i --get-id --flat-playlist --extractor-args \"youtube:player_client=android,web\" --playlist-end {limit} --skip-download {link}"
+            f"yt-dlp -i --get-id --flat-playlist --extractor-args \"youtube:player_client=android,ios,tv_embedded,web\" --playlist-end {limit} --skip-download {link}"
         )
         try:
             result = playlist.split("\n")
@@ -315,7 +315,7 @@ class YouTubeAPI:
                 "geo_bypass": True,
                 "nocheckcertificate": True,
                 "quiet": True,
-                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+                "extractor_args": {"youtube": {"player_client": ["android", "ios", "tv_embedded", "web"]}},
                 "no_warnings": True,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
@@ -333,7 +333,7 @@ class YouTubeAPI:
                 "geo_bypass": True,
                 "nocheckcertificate": True,
                 "quiet": True,
-                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+                "extractor_args": {"youtube": {"player_client": ["android", "ios", "tv_embedded", "web"]}},
                 "no_warnings": True,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
@@ -354,7 +354,7 @@ class YouTubeAPI:
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+                "extractor_args": {"youtube": {"player_client": ["android", "ios", "tv_embedded", "web"]}},
                 "prefer_ffmpeg": True,
                 "merge_output_format": "mp4",
             }
@@ -370,7 +370,7 @@ class YouTubeAPI:
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+                "extractor_args": {"youtube": {"player_client": ["android", "ios", "tv_embedded", "web"]}},
                 "prefer_ffmpeg": True,
                 "postprocessors": [
                     {
