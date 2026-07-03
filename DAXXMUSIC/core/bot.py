@@ -16,8 +16,6 @@ from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
 from pytgcalls.types.input_stream.quality import HighQualityAudio, MediumQualityVideo
 from pytgcalls.types.stream import StreamAudioEnded
 
-from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
-
 import config
 from DAXXMUSIC import LOGGER, YouTube, app
 from DAXXMUSIC.misc import db
@@ -241,6 +239,7 @@ class Call(PyTgCalls):
         image: Union[bool, str] = None,
     ):
         assistant = await group_assistant(self, chat_id)
+        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
         if is_light_mode(chat_id) and not video:
             link = await generate_visualizer(link)
             video = True
@@ -296,6 +295,7 @@ class Call(PyTgCalls):
         assistant = await group_assistant(self, chat_id)
         language = await get_lang(chat_id)
         _ = get_string(language)
+        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
         if is_light_mode(chat_id) and not video:
             link = await generate_visualizer(link)
             video = True
@@ -338,6 +338,7 @@ class Call(PyTgCalls):
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
     async def change_stream(self, client, chat_id):
+        from DAXXMUSIC.utils.visualizer import is_light_mode, generate_visualizer
         check = db.get(chat_id)
         popped = None
         loop = await get_loop(chat_id)
