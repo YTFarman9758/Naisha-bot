@@ -1,9 +1,15 @@
+import pyrogram.utils
 from pyrogram import Client, errors
 from pyrogram.enums import ChatMemberStatus, ParseMode
 
 import config
 
 from ..logging import LOGGER
+
+# Pyrogram's default MIN_CHANNEL_ID is too narrow for some newer/larger
+# Telegram channel IDs, causing a spurious "ValueError: Peer id invalid"
+# even when the bot is a valid admin there. Widen the accepted range.
+pyrogram.utils.MIN_CHANNEL_ID = -1009147483647
 
 
 class DAXX(Client):
