@@ -49,7 +49,15 @@ class Userbot(Client):
     async def start(self):
         LOGGER(__name__).info(f"Starting Assistants...")
         if config.STRING1:
-            await self.one.start()
+            try:
+                await self.one.start()
+            except Exception as e:
+                LOGGER(__name__).error(
+                    f"Assistant Account 1's STRING_SESSION is invalid/corrupted ({type(e).__name__}: {e}). "
+                    "Generate a fresh session string using the SAME pyrogram version this bot uses "
+                    "(pyrogram==2.0.106) — a Telethon or mismatched-version session string will NOT work."
+                )
+                exit()
             try:
                 await self.one.join_chat("Music_logssss")
                 await self.one.join_chat("About_EvoXpro_Owner")
@@ -70,7 +78,15 @@ class Userbot(Client):
             LOGGER(__name__).info(f"Assistant Started as {self.one.name}")
 
         if config.STRING2:
-            await self.two.start()
+            try:
+                await self.two.start()
+            except Exception as e:
+                LOGGER(__name__).error(
+                    f"Assistant Account 2's STRING_SESSION2 is invalid/corrupted ({type(e).__name__}: {e}). "
+                    "Generate a fresh session string using the SAME pyrogram version this bot uses "
+                    "(pyrogram==2.0.106) — a Telethon or mismatched-version session string will NOT work."
+                )
+                exit()
             try:
                 await self.two.join_chat("Music_logssss")
                 await self.one.join_chat("About_EvoXpro_Owner")
@@ -91,7 +107,15 @@ class Userbot(Client):
             LOGGER(__name__).info(f"Assistant Two Started as {self.two.name}")
 
         if config.STRING3:
-            await self.three.start()
+            try:
+                await self.three.start()
+            except Exception as e:
+                LOGGER(__name__).error(
+                    f"Assistant Account 3's STRING_SESSION3 is invalid/corrupted ({type(e).__name__}: {e}). "
+                    "Generate a fresh session string using the SAME pyrogram version this bot uses "
+                    "(pyrogram==2.0.106) — a Telethon or mismatched-version session string will NOT work."
+                )
+                exit()
             try:
                 await self.three.join_chat("Music_logssss")
                 await self.one.join_chat("About_EvoXpro_Owner")
@@ -112,7 +136,15 @@ class Userbot(Client):
             LOGGER(__name__).info(f"Assistant Three Started as {self.three.name}")
 
         if config.STRING4:
-            await self.four.start()
+            try:
+                await self.four.start()
+            except Exception as e:
+                LOGGER(__name__).error(
+                    f"Assistant Account 4's STRING_SESSION4 is invalid/corrupted ({type(e).__name__}: {e}). "
+                    "Generate a fresh session string using the SAME pyrogram version this bot uses "
+                    "(pyrogram==2.0.106) — a Telethon or mismatched-version session string will NOT work."
+                )
+                exit()
             try:
                 await self.four.join_chat("Music_logssss")
                 await self.one.join_chat("About_EvoXpro_Owner")
@@ -133,7 +165,15 @@ class Userbot(Client):
             LOGGER(__name__).info(f"Assistant Four Started as {self.four.name}")
 
         if config.STRING5:
-            await self.five.start()
+            try:
+                await self.five.start()
+            except Exception as e:
+                LOGGER(__name__).error(
+                    f"Assistant Account 5's STRING_SESSION5 is invalid/corrupted ({type(e).__name__}: {e}). "
+                    "Generate a fresh session string using the SAME pyrogram version this bot uses "
+                    "(pyrogram==2.0.106) — a Telethon or mismatched-version session string will NOT work."
+                )
+                exit()
             try:
                 await self.five.join_chat("Music_logssss")
                 await self.one.join_chat("About_EvoXpro_Owner")
