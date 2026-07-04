@@ -14,7 +14,7 @@ async def auto_leave():
         while not await asyncio.sleep(
             config.AUTO_LEAVE_ASSISTANT_TIME
         ):
-            from Spotify_Music.core.userbot import assistants
+            from DAXXMUSIC.core.userbot import assistants
 
             for num in assistants:
                 client = await get_client(num)
@@ -63,7 +63,7 @@ async def auto_end():
                     continue
                 autoend[chat_id] = {}
                 try:
-                    await Spotify.stop_stream(chat_id)
+                    await DAXX.stop_stream(chat_id)
                 except:
                     continue
                 try:
