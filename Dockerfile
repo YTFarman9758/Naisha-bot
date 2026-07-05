@@ -1,5 +1,9 @@
 FROM nikolaik/python-nodejs:python3.10-nodejs19
 
+# Ensure Python's stdout/stderr are never buffered — without this, print()
+# statements can be delayed or missing from streamed container logs.
+ENV PYTHONUNBUFFERED=1
+
 # Debian "buster" reached end-of-life and was moved off the normal mirrors,
 # so apt-get update 404s against deb.debian.org. Point it at
 # archive.debian.org instead, and temporarily skip the extra nodesource/yarn
