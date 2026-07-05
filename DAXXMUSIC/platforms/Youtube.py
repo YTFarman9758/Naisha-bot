@@ -62,6 +62,10 @@ async def api_download_song(link: str) -> str:
                 timeout=aiohttp.ClientTimeout(total=300),
             ) as resp:
                 if resp.status != 200:
+                    body_preview = (await resp.text())[:300]
+                    logging.warning(
+                        f"[shrutibots API] audio request failed: HTTP {resp.status} — {body_preview}"
+                    )
                     return None
                 with open(file_path, "wb") as f:
                     async for chunk in resp.content.iter_chunked(131072):
@@ -98,6 +102,10 @@ async def api_download_video(link: str) -> str:
                 timeout=aiohttp.ClientTimeout(total=600),
             ) as resp:
                 if resp.status != 200:
+                    body_preview = (await resp.text())[:300]
+                    logging.warning(
+                        f"[shrutibots API] video request failed: HTTP {resp.status} — {body_preview}"
+                    )
                     return None
                 with open(file_path, "wb") as f:
                     async for chunk in resp.content.iter_chunked(131072):
@@ -494,7 +502,7 @@ class YouTubeAPI:
                 direct = True
                 downloaded_file = await api_download_video(link)
                 if not downloaded_file:
-                    logging.info("[shrutibots API] video download failed, falling back to yt-dlp")
+                    logging.warning("[shrutibots API] video download failed, falling back to yt-dlp")
                     downloaded_file = await loop.run_in_executor(None, video_dl_ytdlp)
             else:
                 proc = await asyncio.create_subprocess_exec(
@@ -529,6 +537,6 @@ class YouTubeAPI:
             direct = True
             downloaded_file = await api_download_song(link)
             if not downloaded_file:
-                logging.info("[shrutibots API] audio download failed, falling back to yt-dlp")
+                logging.warning("[shrutibots API] audio download failed, falling back to yt-dlp")
                 downloaded_file = await loop.run_in_executor(None, audio_dl_ytdlp)
         return downloaded_file, direct
