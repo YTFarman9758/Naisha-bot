@@ -6,6 +6,7 @@ from typing import Union
 from pytgcalls.types.input_stream import InputStream
 from pytgcalls.types.input_stream import InputAudioStream
 
+import aiohttp
 import yt_dlp
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
@@ -27,7 +28,95 @@ def cookie_txt_file():
 
 
 # ---------------------------------------------------------------------------
-# Cookie-free YouTube access.
+# API-based download (shrutibots) — used as the primary download method.
+# Falls back to cookie-free yt-dlp (below) if the API fails or is unreachable.
+# ---------------------------------------------------------------------------
+API_URL = os.environ.get("SHRUTI_API_URL", "https://api01.shrutibots.site")
+API_KEY = os.environ.get("SHRUTI_API_KEY", "ShrutiBots3OYSuzKa7u0PyQi3ifqT")  ## Get this API KEY from Telegram bot: @SHRUTIAPIBOT
+
+
+def _extract_video_id(link: str) -> str:
+    if "v=" in link:
+        return link.split("v=")[-1].split("&")[0]
+    if "youtu.be/" in link:
+        return link.split("youtu.be/")[-1].split("?")[0]
+    return link
+
+
+async def api_download_song(link: str) -> str:
+    """Download audio via the shrutibots API. Returns file path or None on failure."""
+    video_id = _extract_video_id(link)
+    if not video_id or len(video_id) < 3:
+        return None
+
+    os.makedirs("downloads", exist_ok=True)
+    file_path = os.path.join("downloads", f"{video_id}.mp3")
+    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+        return file_path
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{API_URL}/download",
+                params={"url": video_id, "type": "audio", "api_key": API_KEY},
+                timeout=aiohttp.ClientTimeout(total=300),
+            ) as resp:
+                if resp.status != 200:
+                    return None
+                with open(file_path, "wb") as f:
+                    async for chunk in resp.content.iter_chunked(131072):
+                        f.write(chunk)
+        if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+            return file_path
+        return None
+    except Exception as e:
+        logging.warning(f"[shrutibots API] audio download failed: {e}")
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception:
+                pass
+        return None
+
+
+async def api_download_video(link: str) -> str:
+    """Download video via the shrutibots API. Returns file path or None on failure."""
+    video_id = _extract_video_id(link)
+    if not video_id or len(video_id) < 3:
+        return None
+
+    os.makedirs("downloads", exist_ok=True)
+    file_path = os.path.join("downloads", f"{video_id}.mp4")
+    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+        return file_path
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{API_URL}/download",
+                params={"url": video_id, "type": "video", "api_key": API_KEY},
+                timeout=aiohttp.ClientTimeout(total=600),
+            ) as resp:
+                if resp.status != 200:
+                    return None
+                with open(file_path, "wb") as f:
+                    async for chunk in resp.content.iter_chunked(131072):
+                        f.write(chunk)
+        if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+            return file_path
+        return None
+    except Exception as e:
+        logging.warning(f"[shrutibots API] video download failed: {e}")
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception:
+                pass
+        return None
+
+
+# ---------------------------------------------------------------------------
+# Cookie-free YouTube access (fallback path).
 # We avoid --cookies / cookiefile entirely and instead ask yt-dlp to use the
 # "android" / "web" InnerTube player clients, which (unlike the default web
 # client) do not require a signed-in session to fetch playback URLs. If
@@ -182,6 +271,11 @@ class YouTubeAPI:
         return thumbnail
 
     async def video(self, link: str, videoid: Union[bool, str] = None):
+        """
+        Returns a direct streamable URL (used by pytgcalls InputStream).
+        This stays on yt-dlp's -g flag since the API only returns downloadable
+        files, not a direct stream URL.
+        """
         if videoid:
             link = self.base + link
         if "&" in link:
@@ -308,7 +402,8 @@ class YouTubeAPI:
         if videoid:
             link = self.base + link
         loop = asyncio.get_running_loop()
-        def audio_dl():
+
+        def audio_dl_ytdlp():
             ydl_optssx = {
                 "format": "bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
@@ -326,7 +421,7 @@ class YouTubeAPI:
             x.download([link])
             return xyz
 
-        def video_dl():
+        def video_dl_ytdlp():
             ydl_optssx = {
                 "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
@@ -383,6 +478,8 @@ class YouTubeAPI:
             x = yt_dlp.YoutubeDL(ydl_optssx)
             x.download([link])
 
+        # format_id-specific downloads (used by /songvideo and /songaudio) stay
+        # on yt-dlp since the API doesn't support arbitrary format selection.
         if songvideo:
             await loop.run_in_executor(None, song_video_dl)
             fpath = f"downloads/{title}.mp4"
@@ -393,8 +490,12 @@ class YouTubeAPI:
             return fpath
         elif video:
             if await is_on_off(1):
+                # API first, yt-dlp fallback
                 direct = True
-                downloaded_file = await loop.run_in_executor(None, video_dl)
+                downloaded_file = await api_download_video(link)
+                if not downloaded_file:
+                    logging.info("[shrutibots API] video download failed, falling back to yt-dlp")
+                    downloaded_file = await loop.run_in_executor(None, video_dl_ytdlp)
             else:
                 proc = await asyncio.create_subprocess_exec(
                     "yt-dlp",
@@ -420,8 +521,14 @@ class YouTubeAPI:
                      print(f"File size {total_size_mb:.2f} MB exceeds the 100MB limit.")
                      return None
                    direct = True
-                   downloaded_file = await loop.run_in_executor(None, video_dl)
+                   downloaded_file = await api_download_video(link)
+                   if not downloaded_file:
+                       downloaded_file = await loop.run_in_executor(None, video_dl_ytdlp)
         else:
+            # Plain audio download — API first, yt-dlp fallback
             direct = True
-            downloaded_file = await loop.run_in_executor(None, audio_dl)
+            downloaded_file = await api_download_song(link)
+            if not downloaded_file:
+                logging.info("[shrutibots API] audio download failed, falling back to yt-dlp")
+                downloaded_file = await loop.run_in_executor(None, audio_dl_ytdlp)
         return downloaded_file, direct
