@@ -32,7 +32,7 @@ def cookie_txt_file():
 # Falls back to cookie-free yt-dlp (below) if the API fails or is unreachable.
 # ---------------------------------------------------------------------------
 API_URL = os.environ.get("SHRUTI_API_URL", "https://api01.shrutibots.site")
-_DEFAULT_SHRUTI_KEY = "ShrutiBots3OYSuzKa7u0PyQi3ifqT"
+_DEFAULT_SHRUTI_KEY = "ShrutiBotsCMJel4aMwKOc8ZHhkWHr"
 API_KEY = os.environ.get("SHRUTI_API_KEY", _DEFAULT_SHRUTI_KEY)  ## Get this API KEY from Telegram bot: @SHRUTIAPIBOT
 
 if API_KEY == _DEFAULT_SHRUTI_KEY:
