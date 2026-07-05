@@ -24,8 +24,9 @@ BOT_NAME = getenv("BOT_NAME" , "yt_farman")
 ASSUSERNAME = getenv("ASSUSERNAME" , "MREVO")
 # ---------------------------------------------------------
 # ---------- SHRUTI YOUTUBE API (Naisha Bot Integration) ----------
-SHRUTI_API_URL = os.getenv("SHRUTI_API_URL", "https://api01.shrutibots.site")
-SHRUTI_API_KEY = os.getenv("SHRUTI_API_KEY", None)  # इसे .env में डालें
+# Vars For API End Pont.
+YTPROXY_URL = getenv("YTPROXY_URL", 'https://tgapi.xbitcode.com') ## xBit Music Endpoint.
+YT_API_KEY = getenv("YT_API_KEY" , 'xbit_GjLUhA7Xsu_5Dr_xBdFZLr8LzorcKIkK') ## Your API key like: xbit_10000000xx0233 Get from  https://t.me/tgmusic_apibot
 
 #---------------------------------------------------------------
 #---------------------------------------------------------------
