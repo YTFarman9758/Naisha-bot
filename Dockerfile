@@ -18,5 +18,7 @@ RUN mv /etc/apt/sources.list.d /etc/apt/sources.list.d.bak \
 COPY . /app/
 WORKDIR /app/
 RUN pip3 install --no-cache-dir -U -r requirements.txt
+RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
+RUN pip3 install --no-cache-dir --upgrade youtubesearchpython  # <--- यह लाइन डालें
 
 CMD ["bash", "start"]
