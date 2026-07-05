@@ -44,8 +44,7 @@ telegraph
 unidecode
 yt-dlp
 youtube-search
-youtube-search-python
-youtubesearchpython>=1.0.0
+youtube-search-python==1.6.6
 gtts
 git+https://github.com/AsmSafone/SafoneAPI
 lexica-api==1.5.4
