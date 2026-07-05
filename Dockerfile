@@ -23,7 +23,7 @@ WORKDIR /app/
 # 2.5.0+ requires Python 3.12+). Installing this pin BEFORE requirements.txt
 # means pip will see it's already satisfied and won't try to upgrade it
 # to an incompatible version when processing requirements.txt.
-RUN pip3 install --no-cache-dir "youtubesearchpython==1.6.6"
+RUN pip3 install --no-cache-dir "youtube-search-python==1.6.6"
 
 RUN pip3 install --no-cache-dir -U -r requirements.txt
 
