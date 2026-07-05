@@ -17,8 +17,14 @@ RUN mv /etc/apt/sources.list.d /etc/apt/sources.list.d.bak \
 
 COPY . /app/
 WORKDIR /app/
+
+# Python 3.10 is in use here, so youtubesearchpython must be pinned to a
+# version that still supports it (2.3.0+ requires Python 3.11+, and
+# 2.5.0+ requires Python 3.12+). Installing this pin BEFORE requirements.txt
+# means pip will see it's already satisfied and won't try to upgrade it
+# to an incompatible version when processing requirements.txt.
+RUN pip3 install --no-cache-dir "youtubesearchpython==1.6.6"
+
 RUN pip3 install --no-cache-dir -U -r requirements.txt
-RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
-RUN pip3 install --no-cache-dir --upgrade youtubesearchpython  # <--- यह लाइन डालें
 
 CMD ["bash", "start"]
