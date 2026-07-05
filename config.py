@@ -22,7 +22,9 @@ BOT_NAME = getenv("BOT_NAME" , "yt_farman")
 # ---------------------------------------------------------
 ASSUSERNAME = getenv("ASSUSERNAME" , "MREVO")
 # ---------------------------------------------------------
-
+# ---------- SHRUTI YOUTUBE API (Naisha Bot Integration) ----------
+SHRUTI_API_URL = os.getenv("SHRUTI_API_URL", "https://api01.shrutibots.site")
+SHRUTI_API_KEY = os.getenv("SHRUTI_API_KEY", None)  # इसे .env में डालें
 
 #---------------------------------------------------------------
 #---------------------------------------------------------------
