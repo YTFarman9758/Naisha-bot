@@ -32,7 +32,17 @@ def cookie_txt_file():
 # Falls back to cookie-free yt-dlp (below) if the API fails or is unreachable.
 # ---------------------------------------------------------------------------
 API_URL = os.environ.get("SHRUTI_API_URL", "https://api01.shrutibots.site")
-API_KEY = os.environ.get("SHRUTI_API_KEY", "ShrutiBots3OYSuzKa7u0PyQi3ifqT")  ## Get this API KEY from Telegram bot: @SHRUTIAPIBOT
+_DEFAULT_SHRUTI_KEY = "ShrutiBots3OYSuzKa7u0PyQi3ifqT"
+API_KEY = os.environ.get("SHRUTI_API_KEY", _DEFAULT_SHRUTI_KEY)  ## Get this API KEY from Telegram bot: @SHRUTIAPIBOT
+
+if API_KEY == _DEFAULT_SHRUTI_KEY:
+    print(
+        "[ShrutiAPI] WARNING: SHRUTI_API_KEY env var is not set (or failed to load) — "
+        "using the shared default demo key. This is likely rate-limited/unreliable. "
+        "Get your own key from @SHRUTIAPIBOT on Telegram and set SHRUTI_API_KEY."
+    )
+else:
+    print("[ShrutiAPI] Using your own SHRUTI_API_KEY from the environment.")
 
 
 def _extract_video_id(link: str) -> str:
