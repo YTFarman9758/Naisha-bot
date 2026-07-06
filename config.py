@@ -25,7 +25,7 @@ ASSUSERNAME = getenv("ASSUSERNAME" , "MREVO")
 # ---------------------------------------------------------
 # ---------- SHRUTI YOUTUBE API (Naisha Bot Integration) ----------
 # Vars For API End Pont.
-YTPROXY_URL = getenv("YTPROXY_URL", 'https://tgapi.xbitcode.com') ## xBit Music Endpoint.
+YTPROXY_URL = getenv("YTPROXY_URL", 'https://api01.shrutibots.site') ## xBit Music Endpoint.
 YT_API_KEY = getenv("YT_API_KEY" , 'ShrutiBotsCMJel4aMwKOc8ZHhkWHr') ## Your API key like: xbit_10000000xx0233 Get from  https://t.me/tgmusic_apibot
 
 #---------------------------------------------------------------
